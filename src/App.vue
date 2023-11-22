@@ -66,7 +66,10 @@ const map = ref(null);
 async function handleFilterChange() {
   let ext = view.value.calculateExtent(map.value.map.getSize());
   bbox.value = toLonLat([ext[0], ext[1]]) + ',' + toLonLat([ext[2], ext[3]]);
-  let response = await fetch('https://phenocube.org/api/stac/search?query={"eo%3Acloud_cover"%3A{"lt"%3A"' + cloudcover.value + '"}}&bbox=' + bbox.value);
+  let baseurl = 'https://phenocube.org/api/stac';
+  let query = '{"eo%3Acloud_cover"%3A{"lt"%3A"' + cloudcover.value + '"}}';
+  let url = baseurl + '/search' + '?query=' + query + '&bbox=' + bbox.value;
+  let response = await fetch(url);
   results.value = await response.json();
 }
 </script>
