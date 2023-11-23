@@ -23,6 +23,26 @@
     <ol-tile-layer>
       <ol-source-osm />
     </ol-tile-layer>
+
+    <ol-webgl-tile-layer :style="trueColor" ref="layer">
+      <ol-source-geo-tiff ref="source"
+        :sources="[
+          {
+            // alternative day: 2018/6/S2B_33UUV_20180626_0_L2A/B04.tif
+            url: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/33/U/UV/2023/7/S2A_33UUV_20230715_0_L2A/B04.tif',
+            max: 10000,
+          },
+          {
+            url: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/33/U/UV/2023/7/S2A_33UUV_20230715_0_L2A/B03.tif',
+            max: 10000,
+          },
+          {
+            url: 'https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/33/U/UV/2023/7/S2A_33UUV_20230715_0_L2A/B02.tif',
+            max: 10000,
+          },
+        ]"
+      />
+    </ol-webgl-tile-layer>
   </ol-map>
 
   <h2>Results ({{ results.context.returned }} out of {{ results.context.matched }} matching)</h2>
@@ -47,6 +67,18 @@ const center = ref(fromLonLat([13.0328, 53.9071]));  // center of Demmin (in OSM
 const projection = ref("EPSG:3857");
 const zoom = ref(10);
 const rotation = ref(0);
+
+const max = 3000;
+function normalize(value) {
+  return ["/", value, max];
+}
+const red = normalize(["band", 1]);
+const green = normalize(["band", 2]);
+const blue = normalize(["band", 3]);
+const trueColor = ref({
+  color: ["array", red, green, blue, 1],
+  gamma: 1.1,
+});
 
 const cloudcover = ref(30);
 const bbox = ref('');
