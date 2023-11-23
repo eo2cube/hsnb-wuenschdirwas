@@ -7,7 +7,12 @@
   },
   "dependencies": {
     "vue": "^3.3.4",
-    "vue3-openlayers": "^0.5.1"
+    "vue3-openlayers": "^3.0.0"
+  },
+  "peerDependencies": {
+    "ol": "^8.0.0",
+    "ol-contextmenu": "^5.2.1",
+    "ol-ext": "^4.0.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
