@@ -29,7 +29,7 @@
       <ol-source-osm />
     </ol-tile-layer>
 
-    <ol-webgl-tile-layer :style="ndvi" ref="layer">
+    <ol-webgl-tile-layer :style="evi" ref="layer">
       <ol-source-geo-tiff ref="source"
         :sources="[
           {
@@ -92,6 +92,25 @@ const trueColor = ref({
 // band numbers according to the order in the `sources` array above (1-based)
 const NDVI_FORMULA = ['/', ['-', ['band', 4], ['band', 1]], ['+', ['band', 4], ['band', 1]]];
 
+// constants for EVI calculation
+const L  = 1;
+const C1 = 6;
+const C2 = 7.5;
+const G  = 2.5;
+
+// formula: G * (nir-red) / (nir + C1*red - C2*blue + L)
+const EVI_FORMULA = [
+  '*', G, ['/', 
+                ['-', ['band', 4], ['band', 1]],
+                ['+',
+                      ['-',
+                            ['+', ['band', 4], ['*', C1, ['band', 1]]],
+                                               ['*', C2, ['band', 3]]
+                      ],
+                L]
+          ]
+];
+
 // color ramp for vegetation index
 const colorstops = [
   -0.2,  [191, 191, 191],
@@ -121,6 +140,15 @@ const ndvi = {
     'interpolate',
     ['linear'],
     NDVI_FORMULA,
+    ...colorstops
+  ],
+};
+
+const evi = {
+  color: [
+    'interpolate',
+    ['linear'],
+    EVI_FORMULA,
     ...colorstops
   ],
 };
