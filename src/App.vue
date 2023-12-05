@@ -13,6 +13,11 @@
   {{ bbox }}
 
   <ol-map style="height: 400px/*100cqh*/" ref="map" @moveend="handleFilterChange">
+    <ol-projection-register
+      projectionName="EPSG:32633"
+      projectionDef="+proj=utm +zone=33 +datum=WGS84 +units=m +no_defs +type=crs"
+    />
+    
     <ol-view
       ref="view"
       :center="center"
@@ -63,9 +68,9 @@
 import { ref } from "vue";
 import {fromLonLat, toLonLat} from "ol/proj";
 
-const center = ref(fromLonLat([13.0328, 53.9071]));  // center of Demmin (in OSM)
-const projection = ref("EPSG:3857");
-const zoom = ref(10);
+const center = ref([383825.626, 5966042.979]);  // field known by Sina
+const projection = ref("EPSG:32633");
+const zoom = ref(14);
 const rotation = ref(0);
 
 const max = 3000;
